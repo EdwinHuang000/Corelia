@@ -40,7 +40,6 @@ const jokeWeb=async()=>{
     const newLi=document.createElement('p');
     newLi.append(res.data.joke);
     test.append(newLi);
-
 }
 
 
