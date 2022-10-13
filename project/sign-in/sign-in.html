@@ -10,7 +10,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
    
     <link href="signin.css" rel="stylesheet">
   </head>
@@ -35,13 +35,130 @@
 
     <div class="checkbox mb-3">
       <label>
-        <input type="checkbox" value="remember-me"> Remember me
+        <input type="checkbox" id="rmswitch" value="remember-me"> Remember me
       </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">login</button> 
     <button class="w-100 btn btn-lg btn-primary top-10" type="submit"> admin login </button>  
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
   </form>
-</main>   
+</main>  
+
+<!-- Firebase Script -->
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js";
+  // getAnalytics may be omitted, probably not going to use it (kept here just in case)
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-analytics.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5J1wR2YHtTD8fh_rws7HLqqP1ReziVOk",
+    authDomain: "corelia-dc958.firebaseapp.com",
+    databaseURL: "https://corelia-dc958-default-rtdb.firebaseio.com",
+    projectId: "corelia-dc958",
+    storageBucket: "corelia-dc958.appspot.com",
+    messagingSenderId: "119572348061",
+    appId: "1:119572348061:web:e9639d344308da4f6b2874",
+    measurementId: "G-Z3NQYPVNBK"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+
+  document.getElementById("registerbtn").addEventListener("click", function(){
+
+    const email = document.getElementById("floatingInput").value
+    const password = document.getElementById("floatingPassword").value
+    const username = document.getElementById("floatingUser").value
+
+    createUserWithEmailAndPassword(auth, email, password, username)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      // ...
+      // To check from the console (F12)
+      console.log("created")
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+      // Same as before
+      console.log(errorCode + errorMessage);
+    });
+  })
+
+  import{getDatabase, ref, set, child, get, update, remove}
+    from "https://www.gstatic.com/firebasejs/9.12.0/firebase-database.js"
+
+  const db = getDatabase();
+
+  //-------------References---------------------//
+
+  const email = document.getElementById("floatingInput");
+  const password = document.getElementById("floatingPassword");
+  const username = document.getElementById("floatingUser");
+  const register = document.getElementById("registerbtn");
+
+  //-------------Authentication-------------------//
+
+  function AuthenticateUser(){
+    const dbref = ref(db);
+
+    get(child(dbRef, "UserList/" + username.value)).then((snapshot)=>{
+      if(snapshot.exists()){
+        let dbpass = decPass(snapshot.val().password);
+        if(dbpass == password.value){
+          login();
+        }
+
+        else{
+            alert("user does not exist");
+        }
+
+      }
+
+      else{
+        alert("email or password is invalid");
+      }
+
+    })
+  }
+
+  //----------------Decryption------------------------//
+
+  function encPass(){
+    var pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
+    return pass12.toString(CryptoJS.enc.Utf8);
+  }
+
+  //-----------------Login----------------------------//
+
+  function login(user){
+    let keepLoggedIn = document.getElementById("rmswitch").checked;
+
+    if(!keepLoggedIn){
+      sessionStorage.setItem("user", JSON.stringify(user));
+      window.location="home.html";
+    }
+
+    else{
+      localstorage.setItem("keepLoggedIn", "yes");
+      localstorage.setItem("user", JSON.stringify(user));
+      window.location="home.html";
+    }
+  }
+
+  </script>
+
+
   </body>
 </html>

@@ -16,7 +16,7 @@ body {
   padding: 15px;
 }
 
-.form-signin .form-floating:focus-within {
+.form-signin .form-floating:focus-within .pass-floating:focus-within {
   z-index: 2;
 }
 
@@ -35,4 +35,28 @@ body {
 
 .top-10{
   margin-top: 20px;
+}
+
+.emailtext, .passtext, .usertext {
+  font-weight: 300;
+  font-style: italic;
+  padding: 5px;
+}
+
+label.valid .emailtext, label.valid .passtext {
+  color: #00ff00;
+}
+
+label.invalid .emailtext, label.invalid .passtext {
+  color: #f00;
+}
+
+label.valid::before, label.invalid::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 18px;
+  right: 5px;
+  z-index: 100;
 }
