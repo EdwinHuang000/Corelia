@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.101.0">
+    <title>Sign in</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+   
+    <link href="styles/signin.css" rel="stylesheet">
+  </head>
+  <body class="text-center">
+  
+<main class="form-signin w-100 m-auto">
+  <!--<form>-->
+    <img class="mb-4" src="img/login_logo.jpg" alt="" width="220px" >
+    <h1 class="h3 mb-3 fw-normal">Please login</h1>
+    <p>no account?
+      <a href="sign-up.html">sign up here!</a>
+    </p>
+
+    <div class="form-floating">
+      <input type="username" class="form-control" id="floatingUser" placeholder="Username">
+      <label for="floatingInput">Username</label>
+    </div>
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" id="rmswitch" value="remember-me"> Stay Logged In
+      </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" id="registerbtn">login</button> 
+    <button class="w-100 btn btn-lg btn-primary top-10"> admin login </button>  
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+  <!--</form>-->
+</main>  
+
+<!-- Firebase Script -->
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js";
+  // getAnalytics may be omitted, probably not going to use it (kept here just in case)
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-analytics.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5J1wR2YHtTD8fh_rws7HLqqP1ReziVOk",
+    authDomain: "corelia-dc958.firebaseapp.com",
+    databaseURL: "https://corelia-dc958-default-rtdb.firebaseio.com",
+    projectId: "corelia-dc958",
+    storageBucket: "corelia-dc958.appspot.com",
+    messagingSenderId: "119572348061",
+    appId: "1:119572348061:web:e9639d344308da4f6b2874",
+    measurementId: "G-Z3NQYPVNBK"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+
+  import{getDatabase, ref, set, child, get, update, remove}
+    from "https://www.gstatic.com/firebasejs/9.12.0/firebase-database.js"
+
+  const db = getDatabase();
+
+  //-------------References---------------------//
+
+  const email = document.getElementById("floatingInput");
+  const password = document.getElementById("floatingPassword");
+  const username = document.getElementById("floatingUser");
+  const register = document.getElementById("registerbtn");
+
+  //-------------Authentication-------------------//
+
+  function AuthenticateUser(){
+    const dbref = ref(db);
+
+    get(child(dbref, "UserList/" + username.value)).then((snapshot)=>{
+      if(snapshot.exists()){
+        let dbpass = decPass(snapshot.val().password);
+        if(dbpass == password.value){
+          login(snapshot.val());
+        }
+        else{
+          alert("user does not exist");
+        }
+      }
+      else{
+        alert("username or password is invalid");
+      }
+      
+    });
+
+  }
+
+  //----------------Decryption------------------------//
+
+  function decPass(dbpass){
+    var pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
+    return pass12.toString(CryptoJS.enc.Utf8);
+  }
+
+  //-----------------Login----------------------------//
+
+  function login(user){
+    let keepLoggedIn = document.getElementById("rmswitch").checked;
+
+    if(keepLoggedIn){
+      window.localStorage.setItem('keepLoggedIn', 'yes');
+      window.localStorage.setItem('user', JSON.stringify(user));
+    }
+    else
+    {
+      window.sessionStorage.setItem('user', JSON.stringify(user));
+    }
+    
+    window.location = "home.html";
+  }
+ 
+  //---------------Events--------------------------//
+
+  register.addEventListener("click", AuthenticateUser);
+
+
+  </script>
+
+
+  </body>
+</html>

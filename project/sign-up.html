@@ -4,45 +4,57 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="author" content="sign up page">
     <meta name="generator" content="Hugo 0.101.0">
-    <title>Sign in</title>
+    <title>Signup</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
    
-    <link href="signin.css" rel="stylesheet">
+    <link href="styles/signin.css" rel="stylesheet">
+    <script src="script/sign-up.js"></script>
   </head>
   <body class="text-center">
-  
+
+    
 <main class="form-signin w-100 m-auto">
-  <form>
-    <img class="mb-4" src="../img/login_logo.jpg" alt="" width="220px" >
-    <h1 class="h3 mb-3 fw-normal">Please login</h1>
-    <p>no account?
-      <a href="../sign up/sign-up.html">sign up here!</a>
+  <div>
+    <img class="mb-4" src="img/login_logo.jpg" alt="" width="220px" > 
+
+    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+    <p>have an account?
+      <a href="sign-in.html">login here!</a>
     </p>
 
     <div class="form-floating">
+      <input type="user" class="form-control" id="floatingUser" placeholder="username">
+      <span class="usertext"></span>
+      <label for="floatingUser">Username</label>
+    </div>
+    <div class="form-floating">
       <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <span class="emailtext"></span>
       <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
       <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <span class="passtext"></span>
       <label for="floatingPassword">Password</label>
     </div>
 
+    <!--
     <div class="checkbox mb-3">
       <label>
-        <input type="checkbox" id="rmswitch" value="remember-me"> Remember me
+        <input type="checkbox" value="remember-me"> Remember me
       </label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">login</button> 
-    <button class="w-100 btn btn-lg btn-primary top-10" type="submit"> admin login </button>  
+    -->
+    
+    <button class="w-100 btn btn-lg btn-primary" id="registerbtn">register</button>  
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-  </form>
-</main>  
+  </div>
+</main>
 
 <!-- Firebase Script -->
 
@@ -101,64 +113,123 @@
 
   const db = getDatabase();
 
-  //-------------References---------------------//
+//-----------References-----------------//
 
   const email = document.getElementById("floatingInput");
   const password = document.getElementById("floatingPassword");
   const username = document.getElementById("floatingUser");
   const register = document.getElementById("registerbtn");
 
-  //-------------Authentication-------------------//
+//------------Validation--------------//
 
-  function AuthenticateUser(){
-    const dbref = ref(db);
+  function isEmptyOrSpaces(str){
+    return str == null || str.match(/^ *$/) !== null;
+  }
+
+  function Validation(){
+    let emailregex = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$/;
+    let passregex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+    let userregex = /[a-zA-Z0-9]{5,}/;
+
+    if(isEmptyOrSpaces(username.value) || isEmptyOrSpaces(email.value) || isEmptyOrSpaces(password.value)){
+      alert("You cannot leave any fields empty");
+      return false;
+    }
+
+    if(!userregex.test(username.value)){
+      alert("Your username is invalid");
+      return false;
+    }
+
+    if(!emailregex.test(email.value)){
+      alert("Your email is invalid");
+      return false;
+    }
+
+    if(!passregex.test(password.value)){
+      alert("Your password must be at least 6 characters, have an upper and lowercase letter, and a number");
+      return false;
+    }
+
+    return true;
+  }
+
+//------------Register User to Firebase-----------------//
+
+  function RegisterUser(){
+    
+    if(!Validation()){
+      return;
+    };
+    const dbRef = ref(db);
 
     get(child(dbRef, "UserList/" + username.value)).then((snapshot)=>{
+
       if(snapshot.exists()){
-        let dbpass = decPass(snapshot.val().password);
-        if(dbpass == password.value){
-          login();
-        }
-
-        else{
-            alert("user does not exist");
-        }
-
+        alert("Account Already Exist!");
       }
-
       else{
-        alert("email or password is invalid");
+        set(ref(db, "UserList/"+ username.value),
+        {
+          email: email.value,
+          //password: password.value,
+          password: encPass(),
+          username: username.value
+        })
+        .then(()=>{
+          alert("User added successfully");
+        })
       }
 
     })
+
   }
 
-  //----------------Decryption------------------------//
+//----------------Password Encryption--------------//
 
   function encPass(){
-    var pass12 = CryptoJS.AES.decrypt(dbpass, password.value);
-    return pass12.toString(CryptoJS.enc.Utf8);
+    var pass12 = CryptoJS.AES.encrypt(password.value, password.value);
+    return pass12.toString();
   }
 
-  //-----------------Login----------------------------//
 
-  function login(user){
-    let keepLoggedIn = document.getElementById("rmswitch").checked;
+//----------------Event Assign--------------------//
+  
+  register.addEventListener("click", RegisterUser);
 
-    if(!keepLoggedIn){
-      sessionStorage.setItem("user", JSON.stringify(user));
-      window.location="home.html";
-    }
+</script>
 
+<!-- Backup Validation 
+<script>
+  email.addEventListener("input",()=>{
+    const emailtext = document.querySelector(".emailtext");
+    const emailpattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$/;
+
+    if(email.value.match(emailpattern)){
+      emailtext.innerHTML = "Your Email is Valid";
+    } 
     else{
-      localstorage.setItem("keepLoggedIn", "yes");
-      localstorage.setItem("user", JSON.stringify(user));
-      window.location="home.html";
+      emailtext.innerHTML = "Must be a valid email";
     }
-  }
+  })
 
-  </script>
+  password.addEventListener("input",()=>{
+    const passtext = document.querySelector(".passtext");
+    const passpattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
 
+    if(password.value.match(passpattern)){
+      passtext.innerHTML = "Your Password is Valid";
+    } 
+    else{
+      passtext.innerHTML = "Your password must be at least 6 characters, have an upper and lowercase letter, and a number";
+    }
+  })
+</script>
+-->
 
   </body>
+
+  <!-- Not sure if the script file should be in a separate js file -->
+  
+
 </html>
