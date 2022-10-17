@@ -118,10 +118,16 @@
     }
   }
 
-  main{
-    text-align: center;
+  table{
+    position: relative;
+    left: 200px;
+    
   }
   .mb3{
     margin-top: 40px;
     margin-bottom: 40px;
+  }
+  #tbody1{
+    position: relative;
+    right: 200px;
   }

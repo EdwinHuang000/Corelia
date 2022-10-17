@@ -19,9 +19,7 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <a class="navbar-brand ms-auto" href="./home.html">
-                <img c src="./Corelia Project Logo/Corelia Project_Sub Logo_Black_JPG.jpg" alt="" height="30px">
-              </a>
+              
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 navList">
                   <li class="nav-item dropdown">
@@ -71,6 +69,9 @@
                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                   </ul>
                  </li>
+                 <li class="nav-item dropdown">
+                  <a class="nav-link" aria-current="page" href="./contact.html">Contact</a>
+                </li>
                 </ul>
               
                 <form class="d-flex" role="search">
@@ -98,18 +99,18 @@
              <form>
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Your Name</label>
-                <input type="text" class="form-control w-50" id="exampleFormControlInput1" placeholder="Jack ">
+                <input type="text" class="form-control w-50" id="name" placeholder="Jack ">
               </div>
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                <input type="email" class="form-control w-50" id="exampleFormControlInput1" placeholder="name@example.com">
+                <input type="email" class="form-control w-50" id="email" placeholder="name@example.com">
               </div>
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Your questions</label>
-                <textarea class="form-control w-50" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control w-50" id="question" rows="3"></textarea>
               </div>
       
-             <button type="submit" class="btn btn-primary">Submit</button>
+              <button class="btn btn-primary" id="InsBtn" type="insert">submit</button>
               </form>  
 
            
@@ -119,14 +120,65 @@
         
          
          
-        
+
           <!-- FOOTER -->
           <footer class="container bottom">
             <p class="float-end"><a href="#">Back to top</a></p>
             <p>&copy; 2017–2022 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
           </footer>
-          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-          <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="./blog.js"></script>
+          <script type="module" >
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+              import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+              // TODO: Add SDKs for Firebase products that you want to use
+              // https://firebase.google.com/docs/web/setup#available-libraries
+            
+              // Your web app's Firebase configuration
+              // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+              const firebaseConfig = {
+                apiKey: "AIzaSyBRnn91TxolAL9zwd1BLbbsGU6aZKX0KYM",
+                authDomain: "corelia-cd147.firebaseapp.com",
+                databaseURL: "https://corelia-cd147-default-rtdb.firebaseio.com",
+                projectId: "corelia-cd147",
+                storageBucket: "corelia-cd147.appspot.com",
+                messagingSenderId: "882147339895",
+                appId: "1:882147339895:web:95b7d988c8c37e6cd7e072",
+                measurementId: "G-P16FPBNX23"
+              };
+              // Initialize Firebase
+              const app = initializeApp(firebaseConfig);
+              const analytics = getAnalytics(app);
+              import { getDatabase,get,ref,set,child,update,remove } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+        
+                const db=getDatabase();
+        
+                var name=document.getElementById("name");
+                var email=document.getElementById("email");
+                var question=document.getElementById("question");
+                  
+                var insBtn=document.getElementById("InsBtn");
+                var selBtn=document.getElementById("SelBtn");
+                var updBtn=document.getElementById("UpdBtn");
+                var delBtn=document.getElementById("DelBtn");
+        
+                insBtn.addEventListener('click',InsertData);
+                // selBtn.addEventListener('click',selectData);
+        
+        //  insert data 
+                function InsertData() {
+                  var id= Math.random().toString(16).slice(2);  
+                    set(ref(db,"ContactInfo/"+id),{
+                        ID:id,
+                        Name:name.value,
+                        Email:email.value,
+                        Question:question.value
+                    })
+                    .then(()=>{
+                        alert("data good")
+                    })
+                    .catch((error)=>{
+                        alert("wrong")
+                    })
+                }
+        </script>
 </body>
 </html>
