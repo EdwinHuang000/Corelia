@@ -39,7 +39,7 @@
       </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" id="registerbtn">login</button> 
-    <button class="w-100 btn btn-lg btn-primary top-10"> admin login </button>  
+    <button class="w-100 btn btn-lg btn-primary top-10" id="adminlogin"> admin login </button>  
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
   <!--</form>-->
 </main>  
@@ -73,12 +73,13 @@
 
   const db = getDatabase();
 
-  //-------------References---------------------//
+  //---------------References---------------------//
 
   const email = document.getElementById("floatingInput");
   const password = document.getElementById("floatingPassword");
   const username = document.getElementById("floatingUser");
   const register = document.getElementById("registerbtn");
+  const adminlogin = document.getElementById("adminlogin");
 
   //-------------Authentication-------------------//
 
@@ -97,6 +98,30 @@
       }
       else{
         alert("username or password is invalid");
+      }
+      
+    });
+
+  }
+
+  //--------------Admin Authentication------------------// 
+  //----- U=Admin -- PW=Admin123--------//
+
+  function AuthenticateAdmin(){
+    const dbref = ref(db);
+
+    get(child(dbref, "UserList/" + username.value)).then((snapshot)=>{
+      if(snapshot.exists() && username.value == "Admin"){
+        let dbpass = decPass(snapshot.val().password);
+        if(dbpass == password.value){
+          loginadmin(snapshot.val());
+        }
+        else{
+          alert("Admin password is invalid");
+        }
+      }
+      else{
+        alert("User is not an Admin");
       }
       
     });
@@ -123,14 +148,30 @@
     {
       window.sessionStorage.setItem('user', JSON.stringify(user));
     }
-    
+    window.location = "home.html";
+  }
+
+  //---------------Admin Login---------------------//
+  //****Need to change window.location to the admin home, e.g. window.location = "adminhome.html";//
+
+  function loginadmin(admin){
+    let keepLoggedIn = document.getElementById("rmswitch").checked;
+
+    if(keepLoggedIn){
+      window.localStorage.setItem('keepLoggedIn', 'yes');
+      window.localStorage.setItem('admin', JSON.stringify(admin));
+    }
+    else
+    {
+      window.sessionStorage.setItem('admin', JSON.stringify(admin));
+    }
     window.location = "home.html";
   }
  
   //---------------Events--------------------------//
 
   register.addEventListener("click", AuthenticateUser);
-
+  adminlogin.addEventListener("click", AuthenticateAdmin);
 
   </script>
 
