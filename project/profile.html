@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="styles/profile.css" media="screen"/>
+    <title>ComposerProfile</title>
+</head>
+<body>
+    <section id="header">
+        <nav class="navbar navbar-expand-md bg-light header">
+            <div class="container-fluid">
+              
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <a class="navbar-brand ms-auto" href="home.html">
+                <img c src="Corelia Project Logo/Corelia Project_Sub Logo_Black_JPG.jpg" alt="" height="30px">
+              </a>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 navList">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link" aria-current="page" href="home.html">Home</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a  class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                        Blogs</a>
+                  
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+              
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+                 </li>
+                 <li class="nav-item dropdown">
+                    <a class="nav-link" aria-current="page" href="contact.html">Contact</a>
+                  </li>
+                 <li class="nav-item dropdown">
+                    <a class="nav-link" aria-current="page" href="profile.html">Composer Profile</a>
+                  </li>
+                
+                 <li class="nav-item dropdown">
+                    <a  class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                        Forum</a>
+                  
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+                 </li>
+                </ul>
+              
+                <form class="d-flex" role="search">
+                  <input id ="srch" class="form-control me-2" type="search" placeholder="Search" aria-label="Search"onkeyup="searchfunction()">
+                  <button class="btn btn-outline-success" type="submit"  >Search</button>
+                </form>
+                <ul class="nav">
+                    <li class="nav-item"><a href="sign-in.html" class="nav-link link-dark px-2" id="userlink">Login</a></li>
+                    <li class="nav-item"><a href="sign-up.html" class="nav-link link-dark px-2" id="signoutlink">Sign up</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </section>
+        <main>
+            <div class="img ">
+              <img src="" alt="">
+            </div>
+            <div class="fcf-body">
+  
+              <div id="fcf-form">
+
+                
+                    </div>
+                </div>
+                <div class="student-profile py-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <div class="card shadow-sm">
+                            <div class="card-header bg-transparent text-center">
+                              <img id="profile" class="profile_img" width="300" height="300"  alt="student dp">
+                              <h3 id="heading"></h3>
+                            </div>
+                            <div class="card-body">
+                              <p id="id" class="mb-0"><strong class="pr-1">Composer ID:</strong></p>
+                              <p class="mb-0"><strong class="pr-1">Class:</strong>4</p>
+                              <p class="mb-0"><strong class="pr-1">Section:</strong>A</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-8">
+                          <div class="card shadow-sm">
+                            <div class="card-header bg-transparent border-0">
+                              <h3 class="mb-0"><i class="far fa-clone pr-1"></i>General Information</h3>
+                            </div>
+                            <div class="card-body pt-0">
+                              <table class="table table-bordered" id="composerDetails">
+                                <tr id="author">
+                                  <th width="30%">Role</th>
+                                  <td width="2%">:</td>
+                                  <td>Singer and Composer</td>
+                                </tr>
+                                <tr>
+                                  <th width="30%">Composed Year	</th>
+                                  <td width="2%">:</td>
+                                  <td id="year"></td>
+                                </tr>
+                                <tr>
+                                  <th width="30%">Gender</th>
+                                  <td width="2%">:</td>
+                                  <td>Female</td>
+                                </tr>
+                                <tr>
+                                  <th width="30%">Nationality</th>
+                                  <td width="2%">:</td>
+                                  <td id="nationality"></td>
+                                </tr>
+                                <tr>
+                                  <th width="30%">Website</th>
+                                  <td width="2%">:</td>
+                                  <td id="website"></td>
+                                </tr>
+                              </table>
+                            </div>
+
+                            
+                          </div>
+                            <div style="height: 26px"></div>
+                          <div class="card shadow-sm">
+                            <div class="card-header bg-transparent border-0">
+                              <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Other Information</h3>
+                            </div>
+                            <div class="card-body pt-0">
+                                <p id="biography"></p>
+                            </div>
+                           
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-header bg-transparent border-0">
+                      <h3 class="mb-0"><i class="far fa-clone pr-1" ></i>Works by the composer</h3>
+                      <table class="table table-bordered"  >
+                        <thead >
+                          <th width="30%">Name</th>
+                          <th width="30%">Composed Year	</th>
+                          <th width="30%">Publisher	</th>
+                          <th width="30%">Duration(mins)</th>
+                          <th width="30%">Instrumentation</th>
+                          <th width="30%">Recording Link</th>
+                          <th width="30%">Score Link</th>
+                        </thead>
+                        <tbody id="musicDetails">
+
+                          </tbody>
+                        </tbody>
+                       
+                      </table>
+                    </div>
+                  </div>
+              
+             <!-- FOOTER -->
+          <footer class="container bottom">
+            <p class="float-end"><a href="#">Back to top</a></p>
+            <p>&copy; 2017–2022 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+          </footer>
+          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+          <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+          <script type="module" src="script/index.js"></script>
+          <script type="module" src="script/music.js"></script>
+        
+</body>
+</html>

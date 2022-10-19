@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "dependencies": {
     "ansi-regex": "^5.0.1",
     "balanced-match": "^1.0.2",
